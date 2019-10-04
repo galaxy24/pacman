@@ -34,7 +34,8 @@ class SolveEightQueens:
         Hint: Modify the stop criterion in this function
         """
         newBoard = board
-        i = 0 
+        i = 0
+        restartTimes = 0
         while True:
             if verbose:
                 print("iteration %d" % i)
@@ -42,10 +43,15 @@ class SolveEightQueens:
                 print("# attacks: %s" % str(newBoard.getNumberOfAttacks()))
                 print(newBoard.getCostBoard().toString(True))
             currentNumberOfAttacks = newBoard.getNumberOfAttacks()
+            if restartTimes >= 30 or currentNumberOfAttacks==0:
+                break
             (newBoard, newNumberOfAttacks, newRow, newCol) = newBoard.getBetterBoard()
             i += 1
-            if currentNumberOfAttacks <= newNumberOfAttacks:
-                break
+            if currentNumberOfAttacks <= newNumberOfAttacks and i >= 50:
+                # reset the iteration times
+                i = 0
+                newBoard = Board([[]])
+                restartTimes += 1
         return newBoard
 
 class Board:
